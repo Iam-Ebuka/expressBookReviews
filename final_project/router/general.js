@@ -46,7 +46,8 @@ public_users.get('/author/:author',function (req, res) {
 
   //Note: Assuming the name is "chinua-achebe" or "chinua%20achebe" in the params
   //"Chinua Achebe" will also work
-  let writer = author.split(/-|%20/)
+  let writer = author.replace(/-|%20/g, ' ')
+    .split(' ')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 
@@ -66,7 +67,8 @@ public_users.get('/author/:author',function (req, res) {
 public_users.get('/title/:title',function (req, res) {
     const title = req.params.title
 
-    let bookTitle = title.split(/-|%20/)
+    let bookTitle = title.replace(/-|%20/g, ' ')
+    .split(' ')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 
@@ -88,6 +90,7 @@ public_users.get('/review/:isbn',function (req, res) {
     let review = books[isbn].reviews
   return res.status(200).send(review)
 });
+/*
 
 //task 10
 app.get('/', function (req, res) {
@@ -139,14 +142,16 @@ app.get('/', function (req, res) {
         });
 });
 
+
 //task 12
 function findBookByAuthor(authorName) {
   return new Promise((resolve, reject) => {
     //assuming author is "chinua-achebe" or "chinua%20achebe" in params
-    const writer = authorName
-      .split(/-|%20/)
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+
+  let writer = authorName.replace(/-|%20/g, ' ')
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 
     const findBook = Object.keys(books)
       .filter(key => books[key].author === writer)
@@ -172,15 +177,17 @@ app.get('/author/:author', function (req, res) {
     });
 });
 
+
 //task 13
 function findBookByTitle(title) {
     return new Promise((resolve, reject) => {
         //assuming the title is "things-fall-apart" or "things%20fall%20apart" in params
       const bookTitle = title
-        .split(/-|%20/)
+        .replace(/-|%20/g, ' ')
+        .split(' ')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
-  
+
       const findBook = Object.keys(books)
         .filter(key => books[key].title === bookTitle)
         .map(key => books[key]);
@@ -204,8 +211,8 @@ function findBookByTitle(title) {
         res.status(400).json({ message: error.message });
       });
   });
-  
-    //thanks IBM
+
+  */
   
 
 
