@@ -44,9 +44,9 @@ public_users.get('/isbn/:isbn',function (req, res) {
 public_users.get('/author/:author',function (req, res) {
   const author = req.params.author;
 
-  //Note: Assuming the name is "chinua-achebe" in the params
+  //Note: Assuming the name is "chinua-achebe" or "chinua%20achebe" in the params
   //"Chinua Achebe" will also work
-  let writer = author.split('-')
+  let writer = author.split(/-|%20/)
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 
@@ -66,7 +66,7 @@ public_users.get('/author/:author',function (req, res) {
 public_users.get('/title/:title',function (req, res) {
     const title = req.params.title
 
-    let bookTitle = title.split('-')
+    let bookTitle = title.split(/-|%20/)
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 
@@ -90,7 +90,8 @@ public_users.get('/review/:isbn',function (req, res) {
 });
 
 //task 10
-const sendBooksPromise = new Promise((resolve, reject) => {
+app.get('/', function (req, res) {
+  const sendBooksPromise = new Promise((resolve, reject) => {
     // Simulating an asynchronous operation, like fetching data from a database or an API
     setTimeout(() => {
       // Resolve the promise with the book data
@@ -107,5 +108,106 @@ const sendBooksPromise = new Promise((resolve, reject) => {
     console.error('Error occurred:', error);
     res.status(500).send('An error occurred');
   });
+})
+
+
+  //task 11
+  // Function to fetch book data asynchronously using a Promise
+  function fetchBookData(isbn) {
+    return new Promise((resolve, reject) => {
+        // Simulating fetching data asynchronously
+        setTimeout(() => {
+        const filteredBook = books[isbn];
+        if (filteredBook) {
+            resolve(filteredBook);
+        } else {
+            reject(new Error('Book does not exist in library'));
+        }
+        }, 1000); // Simulating a delay of 1 second
+  });
+}
+  app.get('/isbn/:isbn', function (req, res) {
+    const isbn = req.params.isbn;
+
+    // Fetching book data asynchronously using the function with a Promise
+    fetchBookData(isbn)
+        .then((filteredBook) => {
+        res.status(200).send(filteredBook);
+        })
+        .catch((error) => {
+        res.status(400).json({ message: error.message });
+        });
+});
+
+//task 12
+function findBookByAuthor(authorName) {
+  return new Promise((resolve, reject) => {
+    //assuming author is "chinua-achebe" or "chinua%20achebe" in params
+    const writer = authorName
+      .split(/-|%20/)
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+
+    const findBook = Object.keys(books)
+      .filter(key => books[key].author === writer)
+      .map(key => books[key]);
+
+    if (findBook.length > 0) {
+      resolve(findBook[0]);
+    } else {
+      reject(new Error('No book with such author'));
+    }
+  });
+}
+
+app.get('/author/:author', function (req, res) {
+  const author = req.params.author;
+
+  findBookByAuthor(author)
+    .then(book => {
+      res.status(200).send(book);
+    })
+    .catch(error => {
+      res.status(400).json({ message: error.message });
+    });
+});
+
+//task 13
+function findBookByTitle(title) {
+    return new Promise((resolve, reject) => {
+        //assuming the title is "things-fall-apart" or "things%20fall%20apart" in params
+      const bookTitle = title
+        .split(/-|%20/)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+  
+      const findBook = Object.keys(books)
+        .filter(key => books[key].title === bookTitle)
+        .map(key => books[key]);
+  
+      if (findBook.length > 0) {
+        resolve(findBook[0]);
+      } else {
+        reject(new Error('No book with such author'));
+      }
+    });
+  }
+  
+  app.get('/title/:title', function (req, res) {
+    const title = req.params.title;
+  
+    findBookByTitle(title)
+      .then(book => {
+        res.status(200).send(book);
+      })
+      .catch(error => {
+        res.status(400).json({ message: error.message });
+      });
+  });
+  
+
+  
+
+
 
 module.exports.general = public_users;
