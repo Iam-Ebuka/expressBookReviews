@@ -26,7 +26,6 @@ public_users.post("/register", (req,res) => {
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
-  //Write your code here
   return res.status(200).send(JSON.stringify(books, null, 4));
 });
 
@@ -89,5 +88,24 @@ public_users.get('/review/:isbn',function (req, res) {
     let review = books[isbn].reviews
   return res.status(200).send(review)
 });
+
+//task 10
+const sendBooksPromise = new Promise((resolve, reject) => {
+    // Simulating an asynchronous operation, like fetching data from a database or an API
+    setTimeout(() => {
+      // Resolve the promise with the book data
+      resolve(books);
+    }, 1000); // Simulating a delay of 1 second
+  });
+
+  // Handling the promise resolution
+  sendBooksPromise.then((books) => {
+    // Sending the response when the promise resolves
+    res.status(200).send(JSON.stringify(books, null, 4));
+  }).catch((error) => {
+    // Handling errors if the promise rejects
+    console.error('Error occurred:', error);
+    res.status(500).send('An error occurred');
+  });
 
 module.exports.general = public_users;
