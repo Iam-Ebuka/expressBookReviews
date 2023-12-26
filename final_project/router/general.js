@@ -93,21 +93,21 @@ public_users.get('/review/:isbn',function (req, res) {
 
 
 //task 10
-public_users.get('/task10', function (req, res) {
-  const sendBooksPromise = new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(books);
-    }, 1000); 
-  });
+public_users.get('/task10', async function (req, res) {
+  try {
+    const sendBooksPromise = await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(books); // Assuming 'books' is defined somewhere
+      }, 1000);
+    });
 
-  // Handling the promise resolution
-  sendBooksPromise.then((books) => {
-    res.status(200).send(JSON.stringify(books, null, 4));
-  }).catch((error) => {
+    // Handling the promise resolution
+    res.status(200).send(JSON.stringify(sendBooksPromise, null, 4));
+  } catch (error) {
     console.error('Error occurred:', error);
     res.status(500).send('An error occurred');
-  });
-})
+  }
+});
 
 
   //task 11
