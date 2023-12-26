@@ -90,10 +90,10 @@ public_users.get('/review/:isbn',function (req, res) {
     let review = books[isbn].reviews
   return res.status(200).send(review)
 });
-/*
+
 
 //task 10
-app.get('/', function (req, res) {
+public_users.get('/task10', function (req, res) {
   const sendBooksPromise = new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve(books);
@@ -124,7 +124,7 @@ app.get('/', function (req, res) {
         }, 1000); 
   });
 }
-  app.get('/isbn/:isbn', function (req, res) {
+  public_users.get('/isbn/:isbn/task11', function (req, res) {
     const isbn = req.params.isbn;
 
     // Fetching book data asynchronously using the function with a Promise
@@ -160,7 +160,7 @@ function findBookByAuthor(authorName) {
   });
 }
 
-app.get('/author/:author', function (req, res) {
+  public_users.get('/author/:author/task12', function (req, res) {
   const author = req.params.author;
 
   findBookByAuthor(author)
@@ -195,7 +195,7 @@ function findBookByTitle(title) {
     });
   }
   
-  app.get('/title/:title', function (req, res) {
+  public_users.get('/title/:title/task13', function (req, res) {
     const title = req.params.title;
   
     findBookByTitle(title)
@@ -207,7 +207,7 @@ function findBookByTitle(title) {
       });
   });
 
-  */
+  
   
 
 
