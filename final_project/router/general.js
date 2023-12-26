@@ -190,7 +190,7 @@ function findBookByTitle(title) {
       if (findBook.length > 0) {
         resolve(findBook[0]);
       } else {
-        reject(new Error('No book with such author'));
+        reject(new Error('No book with such title'));
       }
     });
   }
