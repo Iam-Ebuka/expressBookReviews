@@ -95,19 +95,15 @@ public_users.get('/review/:isbn',function (req, res) {
 //task 10
 app.get('/', function (req, res) {
   const sendBooksPromise = new Promise((resolve, reject) => {
-    // Simulating an asynchronous operation, like fetching data from a database or an API
     setTimeout(() => {
-      // Resolve the promise with the book data
       resolve(books);
-    }, 1000); // Simulating a delay of 1 second
+    }, 1000); 
   });
 
   // Handling the promise resolution
   sendBooksPromise.then((books) => {
-    // Sending the response when the promise resolves
     res.status(200).send(JSON.stringify(books, null, 4));
   }).catch((error) => {
-    // Handling errors if the promise rejects
     console.error('Error occurred:', error);
     res.status(500).send('An error occurred');
   });
@@ -118,7 +114,6 @@ app.get('/', function (req, res) {
   // Function to fetch book data asynchronously using a Promise
   function fetchBookData(isbn) {
     return new Promise((resolve, reject) => {
-        // Simulating fetching data asynchronously
         setTimeout(() => {
         const filteredBook = books[isbn];
         if (filteredBook) {
@@ -126,7 +121,7 @@ app.get('/', function (req, res) {
         } else {
             reject(new Error('Book does not exist in library'));
         }
-        }, 1000); // Simulating a delay of 1 second
+        }, 1000); 
   });
 }
   app.get('/isbn/:isbn', function (req, res) {
